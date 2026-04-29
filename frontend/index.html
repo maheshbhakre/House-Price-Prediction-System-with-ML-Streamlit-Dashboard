@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>House Price Predictor</title>
+</head>
+<body>
+
+<h2>House Price Prediction</h2>
+
+<input id="area" placeholder="Area"><br><br>
+<input id="bedrooms" placeholder="Bedrooms"><br><br>
+<input id="bathrooms" placeholder="Bathrooms"><br><br>
+<input id="floors" placeholder="Floors"><br><br>
+<input id="age" placeholder="Age"><br><br>
+<input id="parking" placeholder="Parking"><br><br>
+
+<select id="furnishing">
+    <option>furnished</option>
+    <option>semi-furnished</option>
+    <option>unfurnished</option>
+</select><br><br>
+
+<select id="location">
+    <option>urban</option>
+    <option>suburban</option>
+    <option>rural</option>
+</select><br><br>
+
+<button onclick="predict()">Predict</button>
+
+<h3 id="result"></h3>
+
+<script>
+async function predict() {
+    const data = {
+        area: Number(document.getElementById("area").value),
+        bedrooms: Number(document.getElementById("bedrooms").value),
+        bathrooms: Number(document.getElementById("bathrooms").value),
+        floors: Number(document.getElementById("floors").value),
+        age: Number(document.getElementById("age").value),
+        parking: Number(document.getElementById("parking").value),
+        furnishing: document.getElementById("furnishing").value,
+        location: document.getElementById("location").value
+    };
+
+    const res = await fetch("http://127.0.0.1:8000/predict", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(data)
+    });
+
+    const result = await res.json();
+
+    document.getElementById("result").innerText =
+        "Predicted Price: ₹" + result.predicted_price;
+}
+</script>
+
+</body>
+</html>
